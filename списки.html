@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МедиаЛист - Ваша Коллекция</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+         :root {
+            --primary: #6C63FF;
+            --secondary: #FF6584;
+            --dark: #2A2A2A;
+            --light: #F9F9F9;
+            --success: #4CD964;
+            --warning: #FFCC00;
+            --danger: #FF3B30;
+            --info: #5AC8FA;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #111, #333);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(108, 99, 255, 0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            margin: 0 5px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            border: none;
+            color: var(--light);
+            font-size: 1rem;
+        }
+        
+        .tab i {
+            margin-right: 8px;
+        }
+        
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
+        }
+        
+        .content {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .add-form {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-row {
+            display: flex;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+            margin: 0 10px 10px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.3);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: #5651e5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background: #ff1a0e;
+            box-shadow: 0 5px 15px rgba(255, 59, 48, 0.4);
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .item-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(108, 99, 255, 0.3);
+        }
+        
+        .item-img {
+            height: 160px;
+            background: linear-gradient(135deg, #6C63FF33, #FF658433);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .item-content {
+            padding: 20px;
+        }
+        
+        .item-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .item-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .item-rating {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .item-rating i {
+            color: var(--warning);
+            margin-right: 3px;
+        }
+        
+        .item-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .item-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .status-watching {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .status-completed {
+            background: var(--success);
+            color: white;
+        }
+        
+        .status-plan {
+            background: var(--info);
+            color: white;
+        }
+        
+        .status-dropped {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .empty-list {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .empty-list i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.4;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--primary);
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0 30px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 25px;
+            border-radius: 10px;
+            min-width: 120px;
+            margin: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex-grow: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            .form-group {
+                margin-right: 0;
+            }
+            .tabs {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+                flex-wrap: nowrap;
+            }
+            .tab {
+                flex-shrink: 0;
+            }
+        }
+        /* Animation */
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        .item-card {
+            animation: float 6s ease-in-out infinite;
+            animation-delay: calc(var(--delay) * 1s);
+        }
+        /* Custom scrollbar */
+        
+         ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+         ::-webkit-scrollbar-thumb:hover {
+            background: #5651e5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>МедиаЛист</h1>
+            <p class="subtitle">Управляйте вашей медиа-коллекцией в одном месте</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="anime">
+                <i class="fas fa-theater-masks"></i> Аниме
+            </button>
+            <button class="tab" data-tab="books">
+                <i class="fas fa-book"></i> Книги
+            </button>
+            <button class="tab" data-tab="music">
+                <i class="fas fa-music"></i> Музыка
+            </button>
+            <button class="tab" data-tab="movies">
+                <i class="fas fa-film"></i> Фильмы
+            </button>
+            <button class="tab" data-tab="series">
+                <i class="fas fa-tv"></i> Сериалы
+            </button>
+            <button class="tab" data-tab="dorama">
+                <i class="fas fa-globe-asia"></i> Дорамы
+            </button>
+        </div>
+
+        <div id="anime" class="content active">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="anime-total">0</div>
+                    <div class="stat-label">Всего</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="anime-watching">0</div>
+                    <div class="stat-label">Смотрю</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="anime-completed">0</div>
+                    <div class="stat-label">Завершено</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="anime-planned">0</div>
+                    <div class="stat-label">В планах</div>
+                </div>
+            </div>
+
+            <div class="add-form">
+                <h3>Добавить новое аниме</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="anime-title">Название</label>
+                        <input type="text" id="anime-title" placeholder="Введите название аниме">
+                    </div>
+                    <div class="form-group">
+                        <label for="anime-status">Статус</label>
+                        <select id="anime-status">
+                            <option value="watching">Смотрю</option>
+                            <option value="completed">Завершено</option>
+                            <option value="plan">В планах</option>
+                            <option value="dropped">Брошено</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="anime-rating">Оценка</label>
+                        <select id="anime-rating">
+                            <option value="0">Без оценки</option>
+                            <option value="1">1/10</option>
+                            <option value="2">2/10</option>
+                            <option value="3">3/10</option>
+                            <option value="4">4/10</option>
+                            <option value="5">5/10</option>
+                            <option value="6">6/10</option>
+                            <option value="7">7/10</option>
+                            <option value="8">8/10</option>
+                            <option value="9">9/10</option>
+                            <option value="10">10/10</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="anime-notes">Заметки</label>
+                    <textarea id="anime-notes" rows="3" placeholder="Ваши мысли и впечатления..."></textarea>
+                </div>
+                <button class="btn" id="add-anime-btn">Добавить аниме</button>
+            </div>
+
+            <div class="items-grid" id="anime-list"></div>
+        </div>
+
+        <div id="books" class="content">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="books-total">0</div>
+                    <div class="stat-label">Всего</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="books-reading">0</div>
+                    <div class="stat-label">Читаю</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="books-completed">0</div>
+                    <div class="stat-label">Прочитано</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="books-planned">0</div>
+                    <div class="stat-label">В планах</div>
+                </div>
+            </div>
+
+            <div class="add-form">
+                <h3>Добавить новую книгу</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="book-title">Название</label>
+                        <input type="text" id="book-title" placeholder="Введите название книги">
+                    </div>
+                    <div class="form-group">
+                        <label for="book-author">Автор</label>
+                        <input type="text" id="book-author" placeholder="Имя автора">
+                    </div>
+                    <div class="form-group">
+                        <label for="book-status">Статус</label>
+                        <select id="book-status">
+                            <option value="reading">Читаю</option>
+                            <option value="completed">Прочитано</option>
+                            <option value="plan">В планах</option>
+                            <option value="dropped">Брошено</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="book-rating">Оценка</label>
+                        <select id="book-rating">
+                            <option value="0">Без оценки</option>
+                            <option value="1">1/10</option>
+                            <option value="2">2/10</option>
+                            <option value="3">3/10</option>
+                            <option value="4">4/10</option>
+                            <option value="5">5/10</option>
+                            <option value="6">6/10</option>
+                            <option value="7">7/10</option>
+                            <option value="8">8/10</option>
+                            <option value="9">9/10</option>
+                            <option value="10">10/10</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="book-notes">Заметки</label>
+                    <textarea id="book-notes" rows="3" placeholder="Ваши мысли и впечатления..."></textarea>
+                </div>
+                <button class="btn" id="add-book-btn">Добавить книгу</button>
+            </div>
+
+            <div class="items-grid" id="book-list"></div>
+        </div>
+
+        <div id="music" class="content">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="music-total">0</div>
+                    <div class="stat-label">Всего</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="music-favorite">0</div>
+                    <div class="stat-label">Избранное</div>
+                </div>
+            </div>
+
+            <div class="add-form">
+                <h3>Добавить музыку</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="music-title">Название</label>
+                        <input type="text" id="music-title" placeholder="Название трека/альбома">
+                    </div>
+                    <div class="form-group">
+                        <label for="music-artist">Исполнитель</label>
+                        <input type="text" id="music-artist" placeholder="Имя исполнителя">
+                    </div>
+                    <div class="form-group">
+                        <label for="music-type">Тип</label>
+                        <select id="music-type">
+                            <option value="track">Трек</option>
+                            <option value="album">Альбом</option>
+                            <option value="artist">Исполнитель</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="music-rating">Оценка</label>
+                        <select id="music-rating">
+                            <option value="0">Без оценки</option>
+                            <option value="1">1/10</option>
+                            <option value="2">2/10</option>
+                            <option value="3">3/10</option>
+                            <option value="4">4/10</option>
+                            <option value="5">5/10</option>
+                            <option value="6">6/10</option>
+                            <option value="7">7/10</option>
+                            <option value="8">8/10</option>
+                            <option value="9">9/10</option>
+                            <option value="10">10/10</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="music-favorite">Избранное</label>
+                        <select id="music-favorite">
+                            <option value="no">Нет</option>
+                            <option value="yes">Да</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="music-notes">Заметки</label>
+                    <textarea id="music-notes" rows="3" placeholder="Ваши мысли и впечатления..."></textarea>
+                </div>
+                <button class="btn" id="add-music-btn">Добавить музыку</button>
+            </div>
+
+            <div class="items-grid" id="music-list"></div>
+        </div>
+
+        <div id="movies" class="content">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="movies-total">0</div>
+                    <div class="stat-label">Всего</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="movies-watched">0</div>
+                    <div class="stat-label">Просмотрено</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="movies-planned">0</div>
+                    <div class="stat-label">В планах</div>
+                </div>
+            </div>
+
+            <div class="add-form">
+                <h3>Добавить новый фильм</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="movie-title">Название</label>
+                        <input type="text" id="movie-title" placeholder="Введите название фильма">
+                    </div>
+                    <div class="form-group">
+                        <label for="movie-year">Год</label>
+                        <input type="number" id="movie-year" placeholder="Год выпуска">
+                    </div>
+                    <div class="form-group">
+                        <label for="movie-status">Статус</label>
+                        <select id="movie-status">
+                            <option value="watched">Просмотрено</option>
+                            <option value="plan">В планах</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="movie-rating">Оценка</label>
+                        <select id="movie-rating">
+                            <option value="0">Без оценки</option>
+                            <option value="1">1/10</option>
+                            <option value="2">2/10</option>
+                            <option value="3">3/10</option>
+                            <option value="4">4/10</option>
+                            <option value="5">5/10</option>
+                            <option value="6">6/10</option>
+                            <option value="7">7/10</option>
+                            <option value="8">8/10</option>
+                            <option value="9">9/10</option>
+                            <option value="10">10/10</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="movie-notes">Заметки</label>
+                    <textarea id="movie-notes" rows="3" placeholder="Ваши мысли и впечатления..."></textarea>
+                </div>
+                <button class="btn" id="add-movie-btn">Добавить фильм</button>
+            </div>
+
+            <div class="items-grid" id="movie-list"></div>
+        </div>
+
+        <div id="series" class="content">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="series-total">0</div>
+                    <div class="stat-label">Всего</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="series-watching">0</div>
+                    <div class="stat-label">Смотрю</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="series-completed">0</div>
+                    <div class="stat-label">Завершено</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="series-planned">0</div>
+                    <div class="stat-label">В планах</div>
+                </div>
+            </div>
+
+            <div class="add-form">
+                <h3>Добавить новый сериал</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="series-title">Название</label>
+                        <input type="text" id="series-title" placeholder="Введите название сериала">
+                    </div>
+                    <div class="form-group">
+                        <label for="series-status">Статус</label>
+                        <select id="series-status">
+                            <option value="watching">Смотрю</option>
+                            <option value="completed">Завершено</option>
+                            <option value="plan">В планах</option>
+                            <option value="dropped">Брошено</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="series-season">Сезон</label>
+                        <input type="number" id="series-season" placeholder="Текущий сезон" min="1" value="1">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="series-episode">Эпизод</label>
+                        <input type="number" id="series-episode" placeholder="Текущий эпизод" min="1" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="series-rating">Оценка</label>
+                        <select id="series-rating">
+                            <option value="0">Без оценки</option>
+                            <option value="1">1/10</option>
+                            <option value="2">2/10</option>
+                            <option value="3">3/10</option>
+                            <option value="4">4/10</option>
+                            <option value="5">5/10</option>
+                            <option value="6">6/10</option>
+                            <option value="7">7/10</option>
+                            <option value="8">8/10</option>
+                            <option value="9">9/10</option>
+                            <option value="10">10/10</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="series-notes">Заметки</label>
+                    <textarea id="series-notes" rows="3" placeholder="Ваши мысли и впечатления..."></textarea>
+                </div>
+                <button class="btn" id="add-series-btn">Добавить сериал</button>
+            </div>
+
+            <div class="items-grid" id="series-list"></div>

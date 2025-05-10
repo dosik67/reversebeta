@@ -1,0 +1,126 @@
+\
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Header</title>
+    <!-- Import Manege Demo font -->
+    <link href="https://fonts.cdnfonts.com/css/manege-demo" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Manege Demo', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f0f0;
+        }
+        
+        header {
+            background-color: #000;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            width: 100%;
+            height: 70px;
+            border-bottom: 2px solid #1a1a1a;
+        }
+        
+        .logo {
+            margin-right: 15px;
+        }
+        
+        .logo img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+        
+        .search-bar {
+            position: relative;
+            margin-right: auto;
+            width: 240px;
+            margin-left: 15px;
+        }
+        
+        .search-bar input {
+            background-color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px 8px 35px;
+            width: 100%;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .search-bar svg {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+        }
+        
+        nav {
+            display: flex;
+            margin-left: auto;
+            gap: 30px;
+            /* Increased spacing between navigation items */
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: normal;
+            letter-spacing: 0.5px;
+        }
+        
+        .user-profile {
+            margin-left: 30px;
+            /* Increased spacing before the profile button */
+            background-color: #ff0000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="#">
+                <img src="/материалы/Picsart_25-03-21_19-48-02-121.png" alt="Logo">
+            </a>
+        </div>
+
+        <div class="search-bar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="#B0B0B0"/>
+            </svg>
+            <input type="text" placeholder="Искать фильмы, книги, игры...">
+        </div>
+
+        <nav>
+            <a href="#">Категории</a>
+            <a href="#">Топы</a>
+            <a href="#">Обсуждения</a>
+        </nav>
+
+        <div class="user-profile">
+            <!-- Red circle for user profile -->
+        </div>
+    </header>
+</body>
+
+</html>

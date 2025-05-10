@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МедиаТема - Регистрация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: linear-gradient(to right, #141e30, #243b55);
+        }
+        
+        .register-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+            padding: 40px;
+            width: 400px;
+            max-width: 90%;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .register-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .register-header p {
+            color: #777;
+            font-size: 14px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+        
+        .register-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .register-button:hover {
+            background-color: #3a7bc8;
+        }
+        
+        .register-footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #777;
+        }
+        
+        .register-footer a {
+            color: #4a90e2;
+            text-decoration: none;
+            margin-left: 5px;
+        }
+        
+        .register-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            background-color: rgba(255, 0, 0, 0.1);
+            color: #d32f2f;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <h1>МедиаТема</h1>
+            <p>Создайте свой аккаунт</p>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            Пользователь с таким именем уже существует.
+        </div>
+
+        <form id="registerForm">
+            <div class="input-group">
+                <label for="displayName">Отображаемое имя</label>
+                <input type="text" id="displayName" name="displayName" required>
+            </div>
+
+            <div class="input-group">
+                <label for="username">Имя пользователя</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="input-group">
+                <label for="confirmPassword">Повторите пароль</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+
+            <button type="submit" class="register-button">Зарегистрироваться</button>
+        </form>
+
+        <div class="register-footer">
+            Уже есть аккаунт?<a href="login.html">Войти</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.getElementById('registerForm');
+            const errorMessage = document.getElementById('errorMessage');
+
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const displayName = document.getElementById('displayName').value;
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                // Проверка совпадения паролей
+                if (password !== confirmPassword) {
+                    errorMessage.textContent = 'Пароли не совпадают.';
+                    errorMessage.style.display = 'block';
+                    setTimeout(() => {
+                        errorMessage.style.display = 'none';
+                    }, 3000);
+                    return;
+                }
+
+                // Получение списка пользователей
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+                // Проверка существования пользователя
+                if (users.some(u => u.username === username)) {
+                    errorMessage.textContent = 'Пользователь с таким именем уже существует.';
+                    errorMessage.style.display = 'block';
+                    setTimeout(() => {
+                        errorMessage.style.display = 'none';
+                    }, 3000);
+                    return;
+                }
+
+                // Создание нового пользователя
+                const newUser = {
+                    username,
+                    password,
+                    displayName,
+                    profilePic: 'https://a-static.besthdwallpaper.com/actor-in-hat-in-fire-and-fog-oppenheimer-movie-poster-wallpaper-1280x1024-107792_32.jpg',
+                    viewed: 0,
+                    lists: 0,
+                    reviews: 0
+                };
+
+                // Добавление пользователя в список
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+
+                // Автоматический вход
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+
+                // Переход на главную страницу
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+
+</html>

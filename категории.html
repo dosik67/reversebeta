@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            padding: 3rem 2rem;
+            text-align: center;
+            animation: slideIn 1s ease-out;
+        }
+        
+        .header h1 {
+            font-size: 4rem;
+            letter-spacing: 1rem;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .categories-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+            padding: 3rem 0;
+        }
+        
+        .category-card {
+            width: 800px;
+            height: 200px;
+            background: #111;
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.1);
+        }
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient( 90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .category-card:hover::before {
+            left: 100%;
+        }
+        
+        .category-icon {
+            font-size: 5rem;
+            margin-right: 3rem;
+            min-width: 100px;
+            transition: transform 0.3s ease;
+        }
+        
+        .category-content {
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .category-title {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+        
+        .category-description {
+            font-size: 1.1rem;
+            color: #aaa;
+            line-height: 1.6;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 850px) {
+            .category-card {
+                width: 95%;
+                height: auto;
+                min-height: 180px;
+                flex-direction: column;
+                padding: 2rem;
+                text-align: center;
+            }
+            .category-icon {
+                margin: 0 0 1.5rem 0;
+                font-size: 4rem;
+            }
+            .header h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .category-title {
+                font-size: 1.8rem;
+            }
+            .category-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <h1></h1>
+    </header>
+
+    <div class="container">
+        <div class="categories-list">
+
+            <div class="category-card">
+                <i class="fas fa-book-open category-icon"></i>
+                <div class="category-content">
+                    <h2 class="category-title">Литературный мир</h2>
+                    <p class="category-description">Классические произведения и современные бестселлеры</p>
+                </div>
+            </div>
+
+
+
+            <div class="category-card">
+                <i class="fas fa-globe-asia category-icon"></i>
+                <div class="category-content">
+                    <h2 class="category-title">Дорамы</h2>
+                    <p class="category-description">Классические произведения и современные романтики</p>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            <div class="category-card">
+                <i class="fas fa-film category-icon"></i>
+                <div class="category-content">
+                    <h2 class="category-title">Кинематограф</h2>
+                    <p class="category-description">Артхаус и блокбастеры мирового кинопроката</p>
+                </div>
+            </div>
+
+
+            <div class="category-card">
+                <i class="fas fa-dragon category-icon"></i>
+                <div class="category-content">
+                    <h2 class="category-title">Аниме-вселенная</h2>
+                    <p class="category-description">Японская анимация и связанная с ней культура</p>
+                </div>
+            </div>
+
+
+            <div class="category-card">
+                <i class="fas fa-gamepad category-icon"></i>
+                <div class="category-content">
+                    <h2 class="category-title">Игровая индустрия</h2>
+                    <p class="category-description">От инди-проектов до ААА-релизов</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

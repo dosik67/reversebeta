@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Last of Us Part II</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/старницы попюлярно сейчас/style.css">
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+    <div class="nav-buttons">
+        <button class="nav-btn back" data-url="http://127.0.0.1:5500/index.html"></button>
+        <button class="nav-btn forward" data-url="http://127.0.0.1:5500/%D1%81%D1%82%D0%B0%D1%80%D0%BD%D0%B8%D1%86%D1%8B%20%D0%BF%D0%BE%D0%BF%D1%8E%D0%BB%D1%8F%D1%80%D0%BD%D0%BE%20%D1%81%D0%B5%D0%B9%D1%87%D0%B0%D1%81/2.html"></button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.nav-btn');
+
+            buttons.forEach(btn => {
+                btn.classList.add('loaded');
+                setTimeout(() => btn.classList.remove('loaded'), 500);
+            });
+
+            function handleNavigation(event) {
+                const targetUrl = event.currentTarget.dataset.url;
+                if (targetUrl) window.location.href = targetUrl;
+            }
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', handleNavigation);
+            });
+        });
+    </script>
+
+
+
+    <div class="fullscreen-card">
+        <div class="poster-section">
+            <div class="poster-overlay"></div>
+            <img src="https://ir.ozone.ru/s3/multimedia-c/c1000/6355583172.jpg" alt="The Last of Us Part II" class="poster-image">
+            <button class="trailer-button">Смотреть трейлер</button>
+        </div>
+
+        <div class="info-section">
+            <h1 class="film-title">THE LAST OF US PART II</h1>
+
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <div class="metadata-label">Рейтинг</div>
+                    <div class="metadata-value">9.0/10 IMDb</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">Продолжительность</div>
+                    <div class="metadata-value">24-30 часов</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">Реліз</div>
+                    <div class="metadata-value">19 июня 2020</div>
+                </div>
+            </div>
+
+            <p class="description">
+                Элли отправляется в опасное путешествие мести через постапокалиптическую Америку. Грани между добром и злом стираются в жестоком мире, где каждый выбор имеет последствия. Эпическая история о ненависти и сострадании, ставшая новым эталоном в игровой индустрии.
+            </p>
+
+            <div class="interactive-section">
+                <div class="rating-block">
+                    <h3>Ваша оценка:</h3>
+                    <div class="stars">
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                    </div>
+                    <button class="btn">Подтвердить оценку</button>
+                </div>
+
+                <div class="comments-block">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Ваш комментарий...">
+                        <button class="btn">Отправить</button>
+                    </div>
+                    <div class="comment">
+                        <strong>Геймер:</strong> Самый эмоциональный опыт в истории видеоигр!
+                    </div>
+                    <div class="comment">
+                        <strong>Фанат серии:</strong> Графика и сюжет на новом уровне!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.trailer-button').addEventListener('click', () => {
+            window.open('https://www.youtube.com/watch?v=btmN-bWwv0A', '_blank');
+        });
+
+        // Остальной JavaScript без изменений
+        document.querySelectorAll('.star').forEach((star, index) => {
+            star.addEventListener('click', function() {
+                document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+                for (let i = 0; i <= index; i++) {
+                    document.querySelectorAll('.star')[i].classList.add('active');
+                }
+            });
+        });
+
+        document.querySelector('.comments-block .btn').addEventListener('click', () => {
+            const input = document.querySelector('.comment-input');
+            if (input.value.trim()) {
+                const comment = document.createElement('div');
+                comment.className = 'comment';
+                comment.innerHTML = `<strong>Пользователь:</strong> ${input.value}`;
+                document.querySelector('.comments-block').insertBefore(comment, document.querySelector('.comment-form'));
+                input.value = '';
+            }
+        });
+
+        document.querySelector('.rating-block .btn').addEventListener('click', () => {
+            const activeStars = document.querySelectorAll('.star.active').length;
+            activeStars > 0 ?
+                alert(`Спасибо! Оценка: ${activeStars}/5`) :
+                alert('Выберите оценку!');
+        });
+    </script>
+</body>
+
+</html>

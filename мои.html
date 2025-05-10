@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>архив</title>
+    <style>
+         :root {
+            --gap: 1.5rem;
+            --radius: 12px;
+            --padding: 1.2rem;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui;
+        }
+        
+        body {
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            padding: var(--padding);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .input-section {
+            background: #111;
+            border-radius: var(--radius);
+            padding: var(--padding);
+            margin-bottom: 3rem;
+            border: 1px solid #222;
+        }
+        
+        .input-group {
+            display: grid;
+            gap: var(--gap);
+            margin-bottom: 1.5rem;
+        }
+        
+        input,
+        button {
+            padding: 0.8rem 1rem;
+            border: 1px solid #333;
+            background: #000;
+            color: #fff;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        input:focus {
+            border-color: #fff;
+            outline: none;
+        }
+        
+        button {
+            background: #fff;
+            color: #000;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+        }
+        
+        .rating-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+        
+        #rating {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        #rating::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        #rating::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        #rating::-webkit-slider-runnable-track {
+            height: 6px;
+            background: linear-gradient(90deg, #ff0000 0%, #ffff00 50%, #00ff00 100%);
+            border-radius: 3px;
+        }
+        
+        .rating-value {
+            font-size: 1.2rem;
+            min-width: 40px;
+            text-align: right;
+            animation: bounce 0.3s ease;
+        }
+        
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--gap);
+            margin-top: 2rem;
+        }
+        
+        .movie-card {
+            background: #111;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: transform 0.2s;
+            position: relative;
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .movie-image {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-bottom: 1px solid #222;
+        }
+        
+        .movie-content {
+            padding: 1rem;
+        }
+        
+        .movie-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .movie-rating {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: #000;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid #333;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .sort-btn {
+            background: #222;
+            padding: 0.6rem 1.2rem;
+        }
+        
+        #camera {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+        
+        .camera-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-align: center;
+            border: 2px dashed #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .camera-label:hover {
+            border-color: #666;
+        }
+        
+        .delete-btn {
+            background: #ff4444 !important;
+            color: #fff !important;
+        }
+        
+        #rating {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0;
+            outline: none;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        #rating::-webkit-slider-runnable-track {
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        #rating::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #000;
+            margin-top: -7px;
+            position: relative;
+            transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28), box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+        
+        #rating:hover::-webkit-slider-thumb {
+            transform: scale(1.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+        }
+        
+        #rating:active::-webkit-slider-thumb {
+            transform: scale(1.1);
+            transition: transform 0.1s;
+        }
+        
+        #rating::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #fff;
+            transform: scaleX(calc(var(--value) / 10)) translateY(-50%);
+            transform-origin: left;
+            transition: transform 0.15s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+        
+        .rating-value {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            min-width: 45px;
+            text-align: right;
+            position: relative;
+            padding-right: 8px;
+        }
+        
+        .rating-value::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 2px;
+            height: 16px;
+            background: #fff;
+            transform: translateY(-50%);
+            opacity: 0.3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>архив</h1>
+            <p> оценивай свои кинопросмотры</p>
+        </header>
+
+        <section class="input-section">
+            <div class="input-group">
+                <label for="camera" class="camera-label">
+                    📸 Сделать фото
+                    <input type="file" id="camera" accept="image/*" capture>
+                </label>
+
+                <input type="text" id="title" placeholder="Название фильма">
+
+                <div class="rating-container">
+                    <input type="range" id="rating" min="1" max="10" step="0.1" value="5">
+                    <span class="rating-value" id="ratingValue">5.0</span>
+                </div>
+
+                <div class="action-buttons" style="display: flex; gap: 1rem;">
+                    <button onclick="saveMovie()" id="saveButton">💾 Сохранить</button>
+                    <button class="delete-btn" onclick="deleteMovie()" id="deleteButton" style="display: none;">🗑️ Удалить</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="controls">
+            <button class="sort-btn" onclick="toggleSort()">
+                ↓↑ Сортировка
+                <span id="sortIndicator">(По возрастанию)</span>
+            </button>
+        </div>
+
+        <div class="movies-grid" id="moviesContainer"></div>
+    </div>
+
+    <script>
+        let movies = JSON.parse(localStorage.getItem('movies')) || [];
+        let sortAsc = true;
+        let editingMovieId = null;
+
+        function saveMovie() {
+            const title = document.getElementById('title').value.trim();
+            const fileInput = document.getElementById('camera');
+            const rating = parseFloat(document.getElementById('rating').value);
+
+            if (!title || !fileInput.files[0]) {
+                alert('Пожалуйста, укажите название и добавьте фото');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const movieData = {
+                    id: editingMovieId || Date.now(),
+                    title,
+                    image: e.target.result,
+                    rating,
+                    created: editingMovieId ?
+                        movies.find(m => m.id === editingMovieId).created : new Date().toISOString(),
+                    updated: new Date().toISOString()
+                };
+
+                if (editingMovieId) {
+                    const index = movies.findIndex(m => m.id === editingMovieId);
+                    movies[index] = movieData;
+                } else {
+                    movies.push(movieData);
+                }
+
+                localStorage.setItem('movies', JSON.stringify(movies));
+                renderMovies();
+                resetForm();
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+
+        function deleteMovie() {
+            if (!editingMovieId) return;
+
+            if (confirm('Вы точно хотите удалить этот фильм?')) {
+                movies = movies.filter(m => m.id !== editingMovieId);
+                localStorage.setItem('movies', JSON.stringify(movies));
+                renderMovies();
+                resetForm();
+            }
+        }
+
+        function renderMovies() {
+            const container = document.getElementById('moviesContainer');
+            container.innerHTML = '';
+
+            const sorted = [...movies].sort((a, b) =>
+                sortAsc ? a.rating - b.rating : b.rating - a.rating
+            );
+
+            sorted.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.innerHTML = `
+                    <img src="${movie.image}" class="movie-image" alt="${movie.title}">
+                    <div class="movie-content">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <div class="flex-row" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span class="movie-rating">⭐ ${movie.rating.toFixed(1)}</span>
+                            </div>
+                            <button onclick="startEdit(${movie.id})" 
+                                style="background: none; border: none; color: #fff; cursor: pointer;">
+                                ✏️ Редактировать
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            document.getElementById('sortIndicator').textContent =
+                `(${sortAsc ? 'По возрастанию' : 'По убыванию'})`;
+        }
+
+        function startEdit(id) {
+            const movie = movies.find(m => m.id === id);
+            if (!movie) return;
+
+            editingMovieId = id;
+            document.getElementById('title').value = movie.title;
+            document.getElementById('rating').value = movie.rating;
+            document.getElementById('ratingValue').textContent = movie.rating.toFixed(1);
+            document.getElementById('deleteButton').style.display = 'inline-block';
+            document.getElementById('saveButton').textContent = '💾 Обновить';
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function toggleSort() {
+            sortAsc = !sortAsc;
+            renderMovies();
+        }
+
+        function resetForm() {
+            editingMovieId = null;
+            document.getElementById('title').value = '';
+            document.getElementById('camera').value = '';
+            document.getElementById('rating').value = '5';
+            document.getElementById('ratingValue').textContent = '5.0';
+            document.getElementById('deleteButton').style.display = 'none';
+            document.getElementById('saveButton').textContent = '💾 Сохранить';
+        }
+
+        // Инициализация
+        document.getElementById('rating').addEventListener('input', (e) => {
+            document.getElementById('ratingValue').textContent =
+                parseFloat(e.target.value).toFixed(1);
+        });
+
+        renderMovies();
+    </script>
+</body>
+
+</html>

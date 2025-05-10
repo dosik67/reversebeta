@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Re:Zero − Starting Life in Another World</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/старницы попюлярно сейчас/style.css">
+    <style>
+        .genre-tag {
+            background: #9b59b6;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin: 10px 0;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="nav-buttons">
+        <button class="nav-btn back" data-url="http://127.0.0.1:5500/index.html"></button>
+        <button class="nav-btn forward" data-url="http://127.0.0.1:5500/%D1%81%D1%82%D0%B0%D1%80%D0%BD%D0%B8%D1%86%D1%8B%20%D0%BF%D0%BE%D0%BF%D1%8E%D0%BB%D1%8F%D1%80%D0%BD%D0%BE%20%D1%81%D0%B5%D0%B9%D1%87%D0%B0%D1%81/2.html"></button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.nav-btn');
+
+            buttons.forEach(btn => {
+                btn.classList.add('loaded');
+                setTimeout(() => btn.classList.remove('loaded'), 500);
+            });
+
+            function handleNavigation(event) {
+                const targetUrl = event.currentTarget.dataset.url;
+                if (targetUrl) window.location.href = targetUrl;
+            }
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', handleNavigation);
+            });
+        });
+    </script>
+
+
+
+
+
+    <div class="fullscreen-card">
+        <div class="poster-section">
+            <div class="poster-overlay"></div>
+            <img src="https://i.pinimg.com/736x/07/38/e7/0738e71ec0249b9fd55cae497475956f.jpg" alt="Re:Zero Постер" class="poster-image">
+            <button class="trailer-button">Смотреть трейлер</button>
+        </div>
+
+        <div class="info-section">
+            <h1 class="film-title">RE:ZERO − НАЧАЛО ЖИЗНИ В ДРУГОМ МИРЕ</h1>
+            <div class="genre-tag">Исекай · Драма · Психологический триллер</div>
+
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <div class="metadata-label">Рейтинг</div>
+                    <div class="metadata-value">8.2/10 IMDb</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">Эпизоды</div>
+                    <div class="metadata-value">50 + OVA</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">Премьера</div>
+                    <div class="metadata-value">4 апреля 2016</div>
+                </div>
+            </div>
+
+            <p class="description">
+                Обычный студент Субару Нацуки попадает в фэнтезийный мир, где получает способность "Возвращение Смертью" - возвращаться в определённые моменты после гибели. В попытках спасти близких он сталкивается с жестокими испытаниями, где каждый выбор имеет необратимые
+                последствия. "Я люблю тебя с того самого момента, как ты произнесла своё имя" - история о любви, жертвах и силе человеческого духа.
+            </p>
+
+            <div class="interactive-section">
+                <div class="rating-block">
+                    <h3>Ваша оценка:</h3>
+                    <div class="stars">
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                    </div>
+                    <button class="btn">Подтвердить оценку</button>
+                </div>
+
+                <div class="comments-block">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Ваш комментарий...">
+                        <button class="btn">Отправить</button>
+                    </div>
+                    <div class="comment">
+                        <strong>Фанат Рем:</strong> "Умри просто чтобы спасти меня!" — лучшая героиня аниме!
+                    </div>
+                    <div class="comment">
+                        <strong>Зритель:</strong> Эпизод 15 — эмоциональный аттракцион!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.trailer-button').addEventListener('click', () => {
+            window.open('https://www.youtube.com/watch?v=pI5shgKjkeY', '_blank');
+        });
+
+        document.querySelectorAll('.star').forEach((star, index) => {
+            star.addEventListener('click', function() {
+                document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+                for (let i = 0; i <= index; i++) {
+                    document.querySelectorAll('.star')[i].classList.add('active');
+                }
+            });
+        });
+
+        document.querySelector('.comments-block .btn').addEventListener('click', () => {
+            const input = document.querySelector('.comment-input');
+            if (input.value.trim()) {
+                const comment = document.createElement('div');
+                comment.className = 'comment';
+                comment.innerHTML = `<strong>Фанат:</strong> ${input.value}`;
+                document.querySelector('.comments-block').insertBefore(comment, document.querySelector('.comment-form'));
+                input.value = '';
+            }
+        });
+
+        document.querySelector('.rating-block .btn').addEventListener('click', () => {
+            const activeStars = document.querySelectorAll('.star.active').length;
+            activeStars > 0 ?
+                alert(`Спасибо! Оценка: ${activeStars}/5`) :
+                alert('Выберите оценку!');
+        });
+    </script>
+</body>
+
+</html>

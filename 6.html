@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oppenheimer - Fullscreen Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --black: #0A0A0A;
+            --graphite: #161616;
+            --silver: #B0B0B0;
+            --red: #E63946;
+            --blue: #0077B6;
+            --light-silver: #D9D9D9;
+            --accent: #FFD700;
+            --dark-overlay: rgba(10, 10, 10, 0.95);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background: var(--black);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: var(--silver);
+            overflow-x: hidden;
+        }
+        
+        .fullscreen-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .poster-section {
+            position: relative;
+            background: var(--graphite);
+            overflow: hidden;
+        }
+        
+        .poster-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(10, 10, 10, 0.9) 30%, transparent 100%);
+            z-index: 1;
+        }
+        
+        .poster-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .poster-section:hover .poster-image {
+            transform: scale(1.05);
+        }
+        
+        .info-section {
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--graphite) 0%, var(--black) 100%);
+            position: relative;
+        }
+        
+        .film-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 4.5vw;
+            color: var(--light-silver);
+            margin-bottom: 2rem;
+            line-height: 1;
+            font-weight: 700;
+            letter-spacing: -3px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .metadata-item {
+            border-left: 3px solid var(--red);
+            padding-left: 1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .metadata-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metadata-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metadata-value {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--light-silver);
+        }
+        
+        .description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            max-width: 90%;
+            color: var(--silver);
+        }
+        
+        .interactive-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: auto;
+        }
+        
+        .rating-block,
+        .comments-block {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .rating-block:hover,
+        .comments-block:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-5px);
+        }
+        
+        .stars {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .star {
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--silver);
+        }
+        
+        .star:hover,
+        .star.active {
+            color: var(--accent);
+            transform: scale(1.2);
+        }
+        
+        .comments-block {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        /* Стилизация скроллбара */
+        
+        .comments-block::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .comments-block::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        .comments-block::-webkit-scrollbar-thumb {
+            background: var(--red);
+            border-radius: 10px;
+        }
+        
+        .comment-form {
+            margin-bottom: 2rem;
+        }
+        
+        .comment-input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--black);
+            border: 2px solid var(--silver);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--red);
+            box-shadow: 0 0 10px rgba(230, 57, 70, 0.4);
+        }
+        
+        .comment {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 2px solid var(--blue);
+            transition: all 0.3s ease;
+        }
+        
+        .comment:hover {
+            background: rgba(0, 0, 0, 0.7);
+            transform: translateX(5px);
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--red) 0%, #D90429 100%);
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(230, 57, 70, 0.5);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .trailer-button {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1.5rem 3rem;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, var(--red) 0%, #D90429 100%);
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.5);
+            z-index: 10;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .trailer-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(230, 57, 70, 0.7);
+        }
+        
+        .trailer-button:active {
+            transform: scale(0.98);
+        }
+        
+        @media (max-width: 1200px) {
+            .fullscreen-card {
+                grid-template-columns: 1fr;
+                grid-template-rows: 60vh auto;
+            }
+            .info-section {
+                padding: 2rem;
+            }
+            .film-title {
+                font-size: 3rem;
+            }
+            .interactive-section {
+                grid-template-columns: 1fr;
+            }
+            .trailer-button {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 1rem 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="nav-buttons">
+        <button class="nav-btn back" data-url="http://127.0.0.1:5500/index.html"></button>
+        <button class="nav-btn forward" data-url="http://127.0.0.1:5500/%D1%81%D1%82%D0%B0%D1%80%D0%BD%D0%B8%D1%86%D1%8B%20%D0%BF%D0%BE%D0%BF%D1%8E%D0%BB%D1%8F%D1%80%D0%BD%D0%BE%20%D1%81%D0%B5%D0%B9%D1%87%D0%B0%D1%81/2.html"></button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.nav-btn');
+
+            buttons.forEach(btn => {
+                btn.classList.add('loaded');
+                setTimeout(() => btn.classList.remove('loaded'), 500);
+            });
+
+            function handleNavigation(event) {
+                const targetUrl = event.currentTarget.dataset.url;
+                if (targetUrl) window.location.href = targetUrl;
+            }
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', handleNavigation);
+            });
+        });
+    </script>
+
+
+
+
+
+    <div class="fullscreen-card">
+        <div class="poster-section">
+            <div class="poster-overlay"></div>
+            <img src="https://a-static.besthdwallpaper.com/actor-in-hat-in-fire-and-fog-oppenheimer-movie-poster-wallpaper-1280x1024-107792_32.jpg" alt="Oppenheimer" class="poster-image">
+            <button class="trailer-button">Смотреть трейлер</button>
+        </div>
+
+        <div class="info-section">
+            <h1 class="film-title">OPPENHEIMER</h1>
+
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <div class="metadata-label">Рейтинг</div>
+                    <div class="metadata-value">8.7/10 IMDb</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">Длительность</div>
+                    <div class="metadata-value">180 мин</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">Премьера</div>
+                    <div class="metadata-value">20 июля 2023</div>
+                </div>
+            </div>
+
+            <p class="description">
+                Фильм-исследование жизни Роберта Оппенгеймера и его роли в создании атомной бомбы. Интеллектуальная драма с визуальными эффектами, погружающая зрителя в атмосферу научных открытий и моральных дилемм середины XX века.
+            </p>
+
+            <div class="interactive-section">
+                <div class="rating-block">
+                    <h3>Ваша оценка:</h3>
+                    <div class="stars">
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                        <span class="star">☆</span>
+                    </div>
+                    <button class="btn">Подтвердить оценку</button>
+                </div>
+
+                <div class="comments-block">
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Ваш комментарий...">
+                        <button class="btn">Отправить</button>
+                    </div>
+                    <div class="comment">
+                        <strong>Кинофанат:</strong> Лучший фильм года! Игра актёров потрясающая.
+                    </div>
+                    <div class="comment">
+                        <strong>Историк:</strong> Точное воссоздание эпохи и событий.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Система оценок
+        document.querySelectorAll('.star').forEach((star, index) => {
+            star.addEventListener('click', function() {
+                // Очищаем все звезды
+                document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+
+                // Активируем текущую и все предыдущие звезды
+                for (let i = 0; i <= index; i++) {
+                    document.querySelectorAll('.star')[i].classList.add('active');
+                }
+            });
+        });
+
+        // Отправка комментария
+        document.querySelector('.comments-block .btn').addEventListener('click', () => {
+            const input = document.querySelector('.comment-input');
+            if (input.value.trim()) {
+                const comment = document.createElement('div');
+                comment.className = 'comment';
+                comment.innerHTML = `<strong>Пользователь:</strong> ${input.value}`;
+
+                // Добавляем комментарий после формы
+                const form = document.querySelector('.comment-form');
+                form.parentNode.insertBefore(comment, form.nextSibling);
+
+                input.value = '';
+            }
+        });
+
+        // Открытие трейлера
+        document.querySelector('.trailer-button').addEventListener('click', () => {
+            window.open('https://www.youtube.com/watch?v=uYPbbksJxIg', '_blank');
+        });
+
+        // Подтверждение оценки
+        document.querySelector('.rating-block .btn').addEventListener('click', () => {
+            const activeStars = document.querySelectorAll('.star.active').length;
+            if (activeStars > 0) {
+                alert(`Спасибо! Вы поставили фильму оценку ${activeStars} из 5`);
+            } else {
+                alert('Пожалуйста, выберите оценку для фильма');
+            }
+        });
+    </script>
+</body>
+
+</html>

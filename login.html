@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МедиаТема - Вход</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: linear-gradient(to right, #141e30, #243b55);
+        }
+        
+        .login-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+            padding: 40px;
+            width: 400px;
+            max-width: 90%;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header img {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+        
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .login-header p {
+            color: #777;
+            font-size: 14px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .login-button:hover {
+            background-color: #3a7bc8;
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #777;
+        }
+        
+        .login-footer a {
+            color: #4a90e2;
+            text-decoration: none;
+            margin-left: 5px;
+        }
+        
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            background-color: rgba(255, 0, 0, 0.1);
+            color: #d32f2f;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>МедиаТема</h1>
+            <p>Войдите, чтобы продолжить</p>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            Неправильный логин или пароль. Попробуйте снова.
+        </div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">Логин</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="login-button">Войти</button>
+        </form>
+
+        <div class="login-footer">
+            Еще нет аккаунта?<a href="register.html">Зарегистрируйтесь</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Предустановленные пользователи
+            const defaultUsers = [{
+                username: 'playlistplay',
+                password: 'lifanicx123',
+                displayName: 'playlist',
+                profilePic: 'https://a-static.besthdwallpaper.com/actor-in-hat-in-fire-and-fog-oppenheimer-movie-poster-wallpaper-1280x1024-107792_32.jpg',
+                viewed: 98,
+                lists: 25,
+                reviews: 42
+            }, {
+                username: 'dos41k',
+                password: '123123123',
+                displayName: 'zhandos',
+                profilePic: 'https://a-static.besthdwallpaper.com/actor-in-hat-in-fire-and-fog-oppenheimer-movie-poster-wallpaper-1280x1024-107792_32.jpg',
+                viewed: 142,
+                lists: 38,
+                reviews: 86
+            }];
+
+            // Инициализация localStorage с предустановленными пользователями
+            if (!localStorage.getItem('users')) {
+                localStorage.setItem('users', JSON.stringify(defaultUsers));
+            }
+
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                // Получение списка пользователей
+                const users = JSON.parse(localStorage.getItem('users'));
+
+                // Поиск пользователя
+                const user = users.find(u => u.username === username && u.password === password);
+
+                if (user) {
+                    // Успешный вход
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    window.location.href = 'index.html';
+                } else {
+                    // Ошибка входа
+                    errorMessage.style.display = 'block';
+                    setTimeout(() => {
+                        errorMessage.style.display = 'none';
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

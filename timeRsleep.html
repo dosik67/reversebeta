@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Timer</title>
+    <style>
+        @keyframes glowPulse {
+            0% {
+                filter: drop-shadow(0 0 5px #ff00ff);
+            }
+            50% {
+                filter: drop-shadow(0 0 20px #ff00ff) brightness(1.2);
+            }
+            100% {
+                filter: drop-shadow(0 0 5px #ff00ff);
+            }
+        }
+        
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        body {
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            color: #ff00ff;
+        }
+        
+        .container {
+            border: 2px solid #ff00ff;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 0 30px #ff00ff33;
+            animation: glowPulse 3s infinite;
+            background: #000;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        h1 {
+            text-align: center;
+            text-shadow: 0 0 10px #ff00ff;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            animation: appear 1s ease-out;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            text-shadow: 0 0 5px #ff00ff;
+        }
+        
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 2px solid #ff00ff;
+            color: #ff00ff;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        input:focus,
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 15px #ff00ff;
+        }
+        
+        .command-box {
+            position: relative;
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            border: 1px solid #ff00ff;
+        }
+        
+        #command {
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ff00ff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: #000;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        
+        .copy-btn:hover {
+            background: #ff69f7;
+            box-shadow: 0 0 15px #ff00ff;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 1.5rem 0;
+        }
+        
+        .quick-btn {
+            background: #1a1a1a;
+            border: 2px solid #ff00ff;
+            color: #ff00ff;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        .quick-btn:hover {
+            background: #ff00ff22;
+            box-shadow: 0 0 15px #ff00ff;
+            transform: scale(1.05);
+        }
+        
+        .glow {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 50%, #ff00ff22 0%, #000000 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glow"></div>
+    <div class="container">
+        <h1>⏰ SLEEP TIMER</h1>
+
+        <div class="input-group">
+            <label>⌛ ВРЕМЯ ДО ВЫКЛЮЧЕНИЯ:</label>
+            <input type="number" id="timeInput" placeholder="Введите время..." min="1">
+        </div>
+
+        <div class="input-group">
+            <label>📏 ЕДИНИЦЫ ИЗМЕРЕНИЯ:</label>
+            <select id="unitSelect">
+                <option value="minutes">Минуты</option>
+                <option value="hours">Часы</option>
+            </select>
+        </div>
+
+        <div class="quick-actions">
+            <button class="quick-btn" data-time="30">30 MIN</button>
+            <button class="quick-btn" data-time="1">1 HOUR</button>
+            <button class="quick-btn" data-time="2">2 HOURS</button>
+            <button class="quick-btn" data-time="3">3 HOURS</button>
+        </div>
+
+        <div class="command-box">
+            <div id="command">shutdown -s -t 0</div>
+            <button class="copy-btn">COPY</button>
+        </div>
+    </div>
+
+    <script>
+        const timeInput = document.getElementById('timeInput');
+        const unitSelect = document.getElementById('unitSelect');
+        const commandElement = document.getElementById('command');
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        const quickButtons = document.querySelectorAll('.quick-btn');
+
+        function calculateSeconds() {
+            let time = parseFloat(timeInput.value);
+            if (isNaN(time) || time < 1) return 0;
+
+            return unitSelect.value === 'hours' ?
+                time * 3600 :
+                time * 60;
+        }
+
+        function updateCommand() {
+            const seconds = calculateSeconds();
+            commandElement.textContent = `shutdown -s -t ${seconds}`;
+            commandElement.style.textShadow = seconds > 0 ?
+                '0 0 10px #ff00ff' :
+                'none';
+        }
+
+        timeInput.addEventListener('input', updateCommand);
+        unitSelect.addEventListener('change', updateCommand);
+
+        copyButtons.forEach(btn => {
+            btn.addEventListener('click', async() => {
+                try {
+                    await navigator.clipboard.writeText(commandElement.textContent);
+                    btn.textContent = 'COPIED!';
+                    setTimeout(() => btn.textContent = 'COPY', 2000);
+                } catch (err) {
+                    alert('Ошибка копирования!');
+                }
+            });
+        });
+
+        quickButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                timeInput.value = btn.dataset.time;
+                unitSelect.value = btn.dataset.time <= 3 ? 'hours' : 'minutes';
+                updateCommand();
+            });
+        });
+
+        updateCommand();
+    </script>
+</body>
+
+</html>

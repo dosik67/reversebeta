@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МедиаТема - Обсуждай. Делись. Находи лучшие истории.</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="index.js"></script>
+
+</head>
+
+
+<body>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroSection = document.querySelector('.hero');
+            const heroContent = document.querySelector('.hero-content');
+
+            // Создаем контейнер для видео
+            const videoContainer = document.createElement('div');
+            videoContainer.className = 'video-container';
+            videoContainer.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 0;
+                overflow: hidden;
+            `;
+
+            // Создаем видео элемент
+            const videoElement = document.createElement('video');
+            videoElement.autoplay = true;
+            videoElement.loop = true;
+            videoElement.muted = true;
+            videoElement.playsInline = true;
+            videoElement.style.cssText = `
+                min-width: 100%;
+                min-height: 100%;
+                object-fit: cover;
+                filter: brightness(0.3) grayscale(0.4);
+                transition: transform 8s ease;
+            `;
+
+            // Добавляем видео в контейнер
+            videoContainer.appendChild(videoElement);
+            heroSection.insertBefore(videoContainer, heroContent);
+
+            // Создаем кнопку загрузки
+            const uploadButton = document.createElement('button');
+            uploadButton.className = 'video-upload-btn';
+            uploadButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"></path>
+                    <path d="M18 15l-6-6-6 6"></path>
+                    <path d="M12 3v12"></path>
+                </svg>
+                Загрузить фон
+            `;
+
+            // Стили для кнопки
+            uploadButton.style.cssText = `
+                position: absolute;
+                bottom: 20px;
+                right: 20px;
+                z-index: 3;
+                padding: 8px 16px;
+                background: rgba(0, 0, 0, 0.5);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 25px;
+                color: white;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                backdrop-filter: blur(5px);
+                transition: all 0.3s ease;
+            `;
+
+            uploadButton.addEventListener('mouseenter', () => {
+                uploadButton.style.background = 'rgba(0, 0, 0, 0.7)';
+                uploadButton.style.transform = 'translateY(-2px)';
+            });
+
+            uploadButton.addEventListener('mouseleave', () => {
+                uploadButton.style.background = 'rgba(0, 0, 0, 0.5)';
+                uploadButton.style.transform = 'none';
+            });
+
+            heroSection.appendChild(uploadButton);
+
+            // Обработчик загрузки видео
+            uploadButton.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'video/*';
+
+                input.onchange = e => {
+                    const file = e.target.files[0];
+                    if (file && file.type.startsWith('video/')) {
+                        const url = URL.createObjectURL(file);
+                        videoElement.src = url;
+                        localStorage.setItem('customBackground', url);
+                    }
+                };
+
+                input.click();
+            });
+
+            // Загрузка сохраненного видео
+            const savedVideo = localStorage.getItem('customBackground');
+            if (savedVideo) {
+                videoElement.src = savedVideo;
+            } else {
+                // Дефолтный фон
+                videoElement.poster = '/api/placeholder/1800/900';
+                videoContainer.style.backgroundImage = 'url(/api/placeholder/1800/900)';
+            }
+
+            // Обработчик ошибок
+            videoElement.addEventListener('error', () => {
+                videoContainer.style.backgroundImage = 'url(/api/placeholder/1800/900)';
+                videoElement.style.display = 'none';
+            });
+        });
+    </script>
+
+
+    </head>
+
+
+
+
+
+
+    <body>
+        <header>
+            <div class="search-bar">
+                <svg xmlns="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" placeholder="Искать фильмы, книги, игры...">
+            </div>
+
+
+            <div class="logo">
+                <a href="#">
+                    <img src="/материалы/Picsart_25-03-21_19-48-02-121.png" alt="">
+                </a>
+            </div>
+
+            <nav>
+                <a href="/навбар/категории.html">Категории</a>
+                <a href="/навбар/tops.html">Топы</a>
+                <a href="/навбар/обсуждение.html">Обсуждения</a>
+                <a href="/навбар/мои.html">мои </a>
+            </nav>
+
+
+
+
+            <div class="profile-panel">
+                <div class="glow-effect"></div>
+                <div class="profile-header">
+                    <img src="https://via.placeholder.com/150/FF3B30/161616?text=AV" class="avatar" alt="Profile">
+                    <h2 class="profile-name">Alex Smith</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="menu-buttons">
+                    <button class="menu-button">
+                        <i class="fas fa-user-astronaut"></i>
+                        Profile
+                    </button>
+                    <button class="menu-button">
+                        <i class="fas fa-cogs"></i>
+                        Settings
+                    </button>
+                    <button class="menu-button">
+                        <i class="fas fa-envelope-open-text"></i>
+                        Messages
+                    </button>
+                    <button class="menu-button">
+                        <i class="fas fa-fingerprint"></i>
+                        Security
+                    </button>
+                    <button class="menu-button">
+                        <i class="fas fa-credit-card-front"></i>
+                        Payments
+                    </button>
+                    <button class="menu-button">
+                        <i class="fas fa-bell-on"></i>
+                        Notifications
+                    </button>
+                    <button class="menu-button">
+                        <i class="fas fa-palette"></i>
+                        Appearance
+                    </button>
+                    <button class="menu-button">
+                        <i class="fas fa-rocket-launch"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+        </header>
+
+
+        <div class="profile-trigger" id="profileTrigger"></div>
+
+        <div class="main-content">
+
+        </div>
+
+
+
+
+        <main>
+            <section class="hero">
+                <div class="hero-background"></div>
+                <div class="hero-overlay"></div>
+                <div class="hero-content fade-in">
+                    <h1>Обсуждай. Делись.<br>Находи лучшие истории.</h1>
+                    <p>Платформа для тех, кто хочет обсуждать фильмы, сериалы, аниме, игры и книги. Делись мнением и находи единомышленников.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary">Добавить рецензию</button>
+                        <button class="btn btn-secondary">Создать обсуждение</button>
+                    </div>
+                    <div class="random-quote">
+                        "Я видел такое, во что вы, люди, просто не поверите."
+                        <div class="quote-author">— Бегущий по лезвию (1982)</div>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="section">
+                <div class="section-title">
+                    <h2>Популярное сейчас</h2>
+                    <a href="#" class="view-all">Смотреть все</a>
+                </div>
+                <div class="cards-container" id="cardsContainer"></div>
+            </section>
+        </main>
+
+    </body>
+
+</html>
